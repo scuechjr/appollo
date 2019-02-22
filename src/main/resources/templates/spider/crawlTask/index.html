@@ -1,0 +1,92 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>爬虫管理中心</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="/plugin/layui/css/layui.css"/>
+    <style>
+        .site-title {
+            margin: 30px 0 20px;
+        }
+        .site-title fieldset {
+            border: none;
+            padding: 0;
+            border-top: 1px solid #eee;
+        }
+        .site-title fieldset legend {
+            margin-left: 20px;
+            padding: 0 10px;
+            font-size: 22px;
+            font-weight: 300;
+        }
+        .site-block {
+            padding: 20px;
+            border: 1px solid #eee;
+        }
+        .site-text {
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <div th:include="spider/menu :: menu"></div>
+    <div class="layui-main">
+        <div th:include="spider/crawlTask/index_table::table"></div>
+    </div>
+    <script src="/plugin/layui/layui.js"></script>
+    <script src="/plugin/jquery/jquery-3.3.1.js"></script>
+    <script>
+        // Demo
+        layui.use('form', function(){
+            var form = layui.form;
+
+            form.on('switch(switchTest)', function(data){
+                layer.tips('开关checked：'+ (this.checked ? 'true' : 'false'), data.othis)
+            });
+
+            //监听提交
+//            form.on('submit(formDemo)', function(data){
+//                layer.msg(JSON.stringify(data.field));
+//                return false;
+//            });
+        });
+
+
+        $("#submit1").click(function() {
+            var url = $("input[name='url']").val();
+
+            var xpaths = [];
+            var keys = [];
+            $("input[name='key']").each(function() {
+                var key = $(this).val();
+                keys.push(key);
+
+                var item = {};
+                item[key] = $(this).parent().parent().parent().find("input[name='xpath']").val();
+                xpaths.push(item);
+            });
+
+            $.post("/spider/test", {url: url, xpaths: JSON.stringify(xpaths)}, function(res) {
+                console.log(res);
+                var html = '';
+                if (res.success && res.data) {
+                    for (var key in res.data) {
+                        html += key + ': ' + res.data[key];
+                    }
+                }
+                $('#test_result_box').text(html);
+
+            });
+        });
+
+
+
+
+    </script>
+</body>
+</html>

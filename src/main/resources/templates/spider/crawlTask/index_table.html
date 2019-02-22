@@ -1,0 +1,32 @@
+<div th:fragment="table" xmlns:th="http://www.w3.org/1999/xhtml"/>
+    <table class="layui-table" lay-filter="crawl_task_table" id="crawl_task_table">
+        <thead>
+        <tr>
+            <th lay-data="{type:'checkbox', fixed: 'left'}"></th>
+            <th lay-data="{field:'id', width:80, sort: true, fixed: true}">ID</th>
+            <th lay-data="{field:'name', width:80}">名称</th>
+            <th lay-data="{field:'scheduleType', width:80, sort: true}">调度类型</th>
+            <th lay-data="{field:'scheduleCron', width:80}">调度表达式</th>
+            <th lay-data="{field:'lastExecuteTime', width:160}">上次执行时间</th>
+            <th lay-data="{field:'nextExecuteTime', width:80, sort: true}">下次执行时间</th>
+            <th lay-data="{field:'yn', width:80}">是否有效</th>
+            <th lay-data="{field:'createTime', width:135, sort: true}">入库时间</th>
+            <th lay-data="{field:'modifyTime', width:80, sort: true, fixed: 'right'}">修改时间</th>
+        </tr>
+        </thead>
+    </table>
+    <script>
+    layui.use('table', function() {
+        var table = layui.table;
+        table.render({
+            elem: '#crawl_task_table' ,
+            url:'/spider/crawlTask/query',
+            done: function(res, curr, count) {
+                console.log(res);
+                console.log(curr);
+                console.log(count);
+            }
+        });
+    });
+</script>
+</div>
